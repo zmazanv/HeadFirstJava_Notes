@@ -1,7 +1,5 @@
 # HeadFirst Java, Chapters 7, 8, 9, & 10
 
-Sebastián Zavala Villagómez
-
 ---
 
 ## Chapter 7: Inheritance and Polymorphism
