@@ -1,4 +1,4 @@
-# HeadFirst Java, Chapters 7, 8, 9, & 10
+# HeadFirst Java, Chapters 7, 8, 9, 10, & 11
 
 ---
 
@@ -11,9 +11,9 @@
 - Subclasses do not override instance variables.
 - Consider the following concepts when building an *inheritance tree*:
     1. Look for objects that have common attributes and *behaviours*.
-    2. Design a class that represents the common state and *behaviour*.
-    3. Decide if a *subclass* needs *behaviours* that are specific to that particular *subclass* type.
-    4. Look for more opportunities to use abstraction, by finding two or more *subclasses* that might need common *behaviour*.
+    1. Design a class that represents the common state and *behaviour*.
+    1. Decide if a *subclass* needs *behaviours* that are specific to that particular *subclass* type.
+    1. Look for more opportunities to use abstraction, by finding two or more *subclasses* that might need common *behaviour*.
 - The `final` keyword in a class definition restricts it from being extended, by which it is "end of the line".
 - The JVM will search from lower tiers to higher tiers in the *inheritance tree* for called *methods*.
 ### IS-A and HAS-A
@@ -40,13 +40,13 @@ Consider the following when determining if use of inheritance is being used prop
 - ***Override***: When a *subclass* redefines one of its inherited *methods* when it needs to change or extend the *behaviour* of that *method*.
 - Rules:
     1. Arguments must be the same, and return types must be compatible.
-    2. The *method* can't be less accessible.
+    1. The *method* can't be less accessible.
 ### Overloading
 - ***Overload***: Having two or more *methods* with the same name, but difference argument lists. 
 - Rules:
     1. The return types can be different.
-    2. You can't change **only** the return type.
-    3. The access leves can be varied in any direction.
+    1. You can't change **only** the return type.
+    1. The access leves can be varied in any direction.
 
 ---
 
@@ -97,8 +97,8 @@ Consider the following when determining if use of inheritance is being used prop
 - The *method* on the top of the *stack* is **always** the *currently executing method*.
 - 3 Steps of *Object* Declaration, Creation, and Assignment:
     1. Declare a *reference variable*.
-    2. Create an *object*.
-    3. Link the *object* and the *reference*.
+    1. Create an *object*.
+    1. Link the *object* and the *reference*.
 ### Constructors
 - ***Constructor***: Contains the code that runs when you instantiate an *object*, as in whenever `new` is used on a *class type*.
 - **Only** if a *constructor* is not defined, a default one with no parameters will be created.
@@ -129,3 +129,49 @@ Consider the following when determining if use of inheritance is being used prop
 ### Wrapper Classes
 - All *primitive types* have *wrapper classes* that allow them to be manipulated as *objects*.
 - The *wrapper classes* have useful *static methods* to manipulate the *objects*.
+
+---
+
+## Chapter 11: Exception Handling
+### Exceptions
+- *Exceptions* are *objects* of the type *Exception*.
+- When a risky method is called, as in method that declares an exception, the risky method is what *throws* the *exception*.
+- A *method* *throws an *exception* with the keyword ***throw***, followed by a new *exception object*, such as `throw new InputMismatchException()`.
+### Try/Catch Blocks
+- If you're prepared to handle the *exception*, wrap the *call* in a *try/catch*, and put the code to handle/recover in the *catch* block.
+- If you're not prepared to handle the *exception*, you can still make the *compiler* happy by officially *ducking* the *exception*.
+- *Catch* blocks are used to try to recover from situtations that can't be guaranteed to succeed, or at the very least, print out a message to the user and a *stack trace* to help determine the cause.
+### Runtime Exceptions
+- The *compiler* checks for everything except *RuntimeExceptions*.
+- The *compiler* cares about all subclasses of *Exception*, **unless** they are a special type, *RuntimeException*.
+- Any *exception class* that extends *RuntimeException* gets a free pass.
+- *RuntimeExceptions* can be *thrown* anywhere, with or without *throws* declarations or *try/catch* blocks.
+- The *compiler* doesnt't bother checking whether a *method* declares that it *throws* a *RuntimeException*, or whether the *caller* acknowledges that they might get that *exception* at *runtime*.
+- Most *RuntimeExceptions* come from a problem in code logic, rather than a condition that fails at *runtime* in ways that you cannot predict or prevent.
+- A *try/catch* is for handling exceptional situtations, not flaws in code, so *RuntimeExceptions* do not have to be declared or wrapped in a *try/catch*.
+### Finally Block
+- A *finally* block is where you put code that must run **regardless** of an *exception*.
+### Flow Control
+- If the *try* block fails (an *exception*), flow control immediately moves to the corresponding *catch* block, and once done, the *finally* block runs, if provided, after which the rest of the *method* continues on.
+- If the *try* block succeeds (no *exception*), flow control skips the *catch* blocks, the *finally* block runs, if provided, after which the rest of the *method* continues on.
+- If the *try* block fails (an *exception*) and the *exception* is **not** *caught*, the *finally* block will run if it exists, but the rest of the *method* will not continue as it will be exited.
+### Multiple Exceptions
+- The *compiler* will make sure that you've handled **all** the *checked exceptions* *thrown* by the *method* being *called*.
+- *Catch* blocks can be stacked one after the other under the *try* block, keeping in mind that the order the blocks are stacked in can matter.
+- Multiple *catch* blocks must be ordered from smallest to biggest.
+- The *catch* block with the biggest basket should be at the bottom, otherwise the ones with smaller baskets are useless.
+### Polymorphism
+- *Exceptions* can be referred to *polymorphically*.
+- A *method*'s declaration must declare **all** the *checked exceptions* it can *throw*, although if two or more *exceptions* have a common *superclass*, the *method* can declare just the *superclass* of the *exceptions*.
+- There is no need to have a *catch* block for every possible *exception* that could be *caught*, as long as the *catch* blocks can handle any *exception* *thrown* and you plan to handle them in the same way.
+- A different *catch* block should be used for each *exception* that should handled uniquely.
+### Ducking
+- If you don't want to handle an *exception*, you can *duck* it by declaring it, as the *compiler* still requires you acknowledge it if not handling with *try/catch* blocks.
+- When a *method* *throws* an *exception*, that *method* is *popped*  off the *stack* immediately, and the *exception* is *thrown* to the next *method* down the *stack*, the *caller*.
+- If the *caller* is a *ducker*, then there's no *catch* for it, so the *caller* pops off the stack immediately, and the *exception* is *thrown* to the next *method* and so on.
+- *Ducking*, by declaring, only delays the inevitable, as sooner or later, something has to deal with it.
+### Exception Rules
+1. You cannot have a *catch* nor *finally* without a *try*.
+1. You cannot put code between the *try* and the *catch*.
+1. A *try* **must** be followed by either a *catch* or a *finally*.
+1. A *try* with only a *finally* (no *catch*) must still declare the *exception*.
